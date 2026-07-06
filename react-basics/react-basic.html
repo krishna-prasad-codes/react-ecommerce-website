@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>React Basics</title>
+  <style>
+    body{
+      font-family: Arial, Helvetica, sans-serif;
+      margin-top: 0;
+      margin-bottom: 0;
+      }
+     
+    .send-button {
+     
+      background-color: rgb(25, 135, 84);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      padding: 12px 20px;
+      margin-left: 10px;
+      font-size: 15px;
+
+    }
+
+    .chat-input {
+   
+     /* width: 400px;*/
+      padding-left: 15px;
+      font-size: 16px;
+      height: 35px;
+      border-radius: 10px;
+      border-width: 1px;
+    
+      flex-grow: 1;
+
+
+    }
+    .input-container{
+      display: flex;
+      margin-bottom: 60px;
+     
+    }
+    .app-container{
+     /* justify-content: center;*/
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 600px;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      
+      
+    }
+    .chat-messages-container{
+      flex-grow: 1;
+       margin-top: 20px;
+       overflow: scroll;
+       scrollbar-width: none;
+    }
+    .user-chat{
+      display: flex;
+      justify-content: end;
+      align-items: center;
+    }
+    .robot-chat{
+      display: flex;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      align-items: start;
+    }
+    .chat-messages{
+      background-color: rgb(238, 238, 238);
+      border-radius: 10px;
+     /* white-space: nowrap;*/
+      padding: 15px 20px;
+      margin-right: 10px;
+      margin-left: 10px;
+      max-width: 300px;
+    }
+    .chat-message-profile{
+      width: 40px;
+    }
+
+    
+  </style>
+</head>
+
+
+<body>
+
+  <div class="js-container"></div>
+
+  <script src="https://unpkg.com/supersimpledev/react.js"></script>
+  <script src="https://unpkg.com/supersimpledev/react-dom.js"></script>
+  <script src="https://unpkg.com/supersimpledev/chatbot.js"></script>
+
+
+  <script src="https://unpkg.com/supersimpledev/babel.js"></script>
+  <script type="text/babel">
+    function MessageInput({ chatMessages, setChatMessages }) {
+      const [inputText, setInputText] = React.useState('');
+
+      function saveInputText(event) {
+        setInputText(event.target.value);
+        // console.log(inputText)
+      }
+      function sendMessage() {
+        console.log(inputText)
+        const newChatmessages = [
+          ...chatMessages,
+          {
+            message: inputText,
+            sender: 'user',
+            id: crypto.randomUUID()
+          }
+        ]
+        console.log(newChatmessages);
+        setChatMessages(newChatmessages);
+        const response = chatbot.getResponse(inputText)
+        console.log(response)
+        setChatMessages([
+          ...newChatmessages, {
+            message: response,
+            sender: 'robot',
+            id: crypto.randomUUID()
+          }
+        ])
+        setInputText('')
+      }
+      return (
+        <div className="input-container">
+          <input
+            placeholder="send a mesage to chatbox"
+            onChange={saveInputText}
+            value={inputText}
+            className="chat-input"
+          />
+          <button
+            onClick={sendMessage}
+            className="send-button"
+          >
+            send
+          </button>
+        </div>
+      )
+    };
+
+    function ChatMessage(props) {
+      // console.log(props)
+      //const message = props.message;
+      // const sender = props.sender;
+      //deconstructing
+      const { message } = props;
+      const { sender } = props;
+      //const{message,sender}=props;
+      //funtion({message,sesnder})
+
+      /* if (sender == "robot") {
+         return (
+           <div>
+             <img src="robot.png" width="40" />
+             {message}
+           </div>
+         )
+       }*/
+
+
+      return (
+        <div 
+        className={sender == 'user' ? "user-chat" : "robot-chat"}>
+          {sender == "robot" 
+          && 
+          <img 
+           className="chat-message-profile"
+           src="robot.png"  />}
+        <div className="chat-messages">
+           {message}
+        </div>
+          {sender == "user" && 
+          <img 
+          src="user.png" 
+          className="chat-message-profile" />}
+        </div>
+      )
+    };
+    function ChatMessages({ chatMessages }) {
+      //deconstrcting
+      //const [chatMessages,setChatMessages]=react.usestate
+      /*  const array = React.useState([
+          {
+            message: 'hello',
+            sender: "user",
+            id: "id1"
+          },
+          {
+            message: "Hello! How can I help you?",
+            sender: "robot",
+            id: "id2"
+          },
+          {
+            message: "can you tell today date?",
+            sender: "user",
+            id: "id3"
+          },
+          {
+            message: "Today is June 24",
+            sender: "robot",
+            id: "id4"
+          },
+          {
+            message: "can you flip the coin",
+            sender: "user",
+            id: "id5"
+          },
+          {
+            message: "Sure! You got heads",
+            sender: "robot",
+            id: "id6"
+          },
+          {
+            message: "thank you",
+            sender: "user",
+            id: "id7"
+          }, {
+            message: "No problem! Let me know if you need help with anything else!",
+            sender: "robot",
+            id: "id8"
+          }
+        ])*/
+      //const [chatmessage,setchatmessages]=array
+      //
+      /* const chatMessages = array[0]
+       const setChatMessages = array[1]
+       /* const chatMessages = [
+          {
+            message: 'hello',
+            sender: "user",
+            id: "id1"
+          },
+          {
+            message: "Hello! How can I help you?",
+            sender: "robot",
+            id: "id2"
+          },
+          {
+            message: "can you tell today date?",
+            sender: "user",
+            id: "id3"
+          },
+          {
+            message: "Today is June 24",
+            sender: "robot",
+            id: "id4"
+          },
+          {
+            message: "can you flip the coin",
+            sender: "user",
+            id: "id5"
+          },
+          {
+            message: "Sure! You got heads",
+            sender: "robot",
+            id: "id6"
+          },
+          {
+            message: "thank you",
+            sender: "user",
+            id: "id7"
+          }, {
+            message: "No problem! Let me know if you need help with anything else!",
+            sender: "robot",
+            id: "id8"
+          }
+        ]*/
+      /* function sendMessage() {
+         setChatMessages([
+           ...chatMessages,
+           {
+             message: 'text',
+             sender: 'user',
+             id: crypto.randomUUID()
+           }
+         ])
+ 
+       }
+       console.log(chatMessages)*/
+       const chatMessagesRef= React.useRef(null);
+       React.useEffect(()=>{
+         const containerElem=chatMessagesRef.current;
+        if(containerElem){
+         containerElem.scrollTop=containerElem.scrollHeight
+        }
+      },[chatMessages])
+
+
+
+      return (
+        <div 
+        className="chat-messages-container"
+        ref={chatMessagesRef}
+        >
+          {/* <button onClick={sendMessage}>send</button>*/}
+          {
+            chatMessages.map((chatMessage) => {
+              /* console.log(chatMessage)*/
+              return (
+                <ChatMessage
+                  message={chatMessage.message}
+                  sender={chatMessage.sender}
+                  key={chatMessage.id}
+                />
+              )
+            })
+          }
+        </div>
+      )
+
+    };
+
+
+    function App() {
+      const array = React.useState([
+        {
+          message: 'hello',
+          sender: "user",
+          id: "id1"
+        },
+        {
+          message: "Hello! How can I help you?",
+          sender: "robot",
+          id: "id2"
+        },
+        {
+          message: "can you tell today date?",
+          sender: "user",
+          id: "id3"
+        },
+        {
+          message: "Today is June 24",
+          sender: "robot",
+          id: "id4"
+        },
+        {
+          message: "can you flip the coin",
+          sender: "user",
+          id: "id5"
+        },
+        {
+          message: "Sure! You got heads",
+          sender: "robot",
+          id: "id6"
+        },
+        {
+          message: "thank you",
+          sender: "user",
+          id: "id7"
+        }, {
+          message: "No problem! Let me know if you need help with anything else!",
+          sender: "robot",
+          id: "id8"
+        }
+      ])
+      //const [chatmessage,setchatmessages]=array
+      //
+      const chatMessages = array[0]
+      const setChatMessages = array[1]
+
+      /* const chatMessages = [
+         {
+           message: 'hello',
+           sender: "user",
+           id: "id1"
+         },
+         {
+           message: "Hello! How can I help you?",
+           sender: "robot",
+           id: "id2"
+         },
+         {
+           message: "can you tell today date?",
+           sender: "user",
+           id: "id3"
+         },
+         {
+           message: "Today is June 24",
+           sender: "robot",
+           id: "id4"
+         },
+         {
+           message: "can you flip the coin",
+           sender: "user",
+           id: "id5"
+         },
+         {
+           message: "Sure! You got heads",
+           sender: "robot",
+           id: "id6"
+         },
+         {
+           message: "thank you",
+           sender: "user",
+           id: "id7"
+         }, {
+           message: "No problem! Let me know if you need help with anything else!",
+           sender: "robot",
+           id: "id8"
+         }
+
+       ]*/
+
+      /*chatComponents*=*//*chatMessages.map(()=>{
+        return(
+          <ChatMessage 
+           message={ChatMessage.message}
+           sender={ChatMessage.sender}
+          />
+ 
+        );
+      }) */
+
+      return (
+        <div className="app-container">
+          
+          {/*MessageInput()*/}
+          <ChatMessages
+            chatMessages={chatMessages}
+            setChatMessages={setChatMessages}
+          />
+          <MessageInput
+            chatMessages={chatMessages}
+            setChatMessages={setChatMessages}
+          />
+          {/*chatMessages.map((chatMessage) => {
+            console.log(chatMessage)
+            return (
+              <ChatMessage
+                message={chatMessage.message}
+                sender={chatMessage.sender}
+                id={chatMessage.id}
+              />
+            );
+          })
+         */ }
+
+          { /*<ChatMessage message="hello chatbot" sender="user" />
+          <ChatMessage message="Hello! How can I help you?" sender="robot" />
+          <ChatMessage message="can you tell today date?" sender="user" />
+          <ChatMessage message="Today is June 24" sender="robot" />
+          <ChatMessage message="can you flip the coin" sender="user" />
+          <ChatMessage message="Sure! You got heads" sender="robot" />
+
+          <ChatMessage message="thank you" sender="user" />
+          <ChatMessage message="No problem! Let me know if you need help with anything else!" sender="robot" />
+         */}
+        </div>
+      );
+
+    }
+
+    /*const app = (
+     )*/
+
+
+    const div = document.querySelector('.js-container');
+    ReactDOM.createRoot(div).render(<App />);
+  </script>
+  <script src="react-basics.js"></script>
+  <script src="https://unpkg.com/supersimpledev@8.6.4/external-library.js"></script>
+</body>

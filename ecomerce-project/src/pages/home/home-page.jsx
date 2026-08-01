@@ -5,6 +5,7 @@ import './HomePage.css'
 //import { products } from '../../starting-code/data/products';
 import { useEffect, useState } from 'react';
 
+
 export function HomePage({ cart }) {
     //fetch().then((response)=>{
     //response.json.then((data)=>{}) })
@@ -13,10 +14,12 @@ export function HomePage({ cart }) {
     const [products, setProducts] = useState([]);
     //const[cart,setCart]=useState([]);
     useEffect(() => {
-        axios.get('/api/products')
-            .then((response) => {
-                setProducts(response.data);
-            })
+        const renderHome=async ()=>{
+            const response= await axios.get('/api/products')
+            setProducts(response.data);
+        };
+        
+           renderHome();
         /* axios.get('http://localhost:3000/api/cart-items')
            .then((response)=>{
              setCart(response.data)

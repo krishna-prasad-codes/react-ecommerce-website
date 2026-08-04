@@ -19,7 +19,7 @@ export function CheckoutPage({ cart ,loadCart }) {
     };
     fetchCheckout();
 
-  }, [])
+  }, [cart])
 
   return (
     <>
@@ -48,7 +48,7 @@ export function CheckoutPage({ cart ,loadCart }) {
         <div className="page-title">Review your order</div>
 
         <div className="checkout-grid">
-          <OrderSummary deliveryOptions={deliveryOptions} cart={cart} />
+          <OrderSummary deliveryOptions={deliveryOptions} cart={cart} loadCart={loadCart} />
 
           <PaymentSummary paymentSummary={paymentSummary}  loadCart={loadCart} />
 

@@ -13,7 +13,7 @@ export function Products({ product, loadCart }) {
             quantity
         });
         await loadCart();
-
+    }
 
         const selectQuantity = (event) => {
             const quantitySelected = Number(event.target.value);
